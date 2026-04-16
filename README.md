@@ -47,20 +47,21 @@ playwright-framework/
 ├── src/
 │   ├── pages/
 │   │   ├── BasePage.ts              # Abstract base class for all page objects
-│   │   ├── ExamplePage.ts           # Page object for example.com
-│   │   ├── LoginPage.ts             # Page object for practice site login
-│   │   └── SecurePage.ts            # Page object for secure area after login
+│   │   ├── AuthPage.ts              # Abstract auth page (common form elements)
+│   │   ├── LoginPage.ts             # Login page object (extends AuthPage)
+│   │   ├── RegisterPage.ts          # Register page object (extends AuthPage)
+│   │   └── SecurePage.ts            # Secure area page object (extends BasePage)
 │   ├── fixtures/
 │   │   ├── pageFixtures.ts          # Custom test fixtures for page objects
 │   │   └── baseTest.ts              # Extended test interface
 │   ├── utils/
-│   │   └── testHelpers.ts           # Reusable test utilities and helpers
+│   │   └── testHelpers.ts           # Test utilities: UUID generator, retry logic, etc.
 │   └── types/
 │       └── index.ts                 # Custom TypeScript type definitions
 ├── tests/
 │   └── specs/
-│       ├── example.spec.ts          # Example.com test suite
-│       └── login.spec.ts            # Login page test suite
+│       ├── login.spec.ts            # Login page test suite (7 tests)
+│       └── register.spec.ts         # Registration page test suite (8 tests)
 ├── test-results/                    # Test execution results (generated)
 ├── .vscode/
 │   ├── extensions.json              # Recommended VS Code extensions
@@ -215,8 +216,18 @@ test.describe('Dashboard Page Tests', () => {
 
 Page Objects encapsulate all locators and interactions for a specific page. This pattern improves test maintainability and readability.
 
+### Class Hierarchy
+
+```
+BasePage (abstract)
+├── AuthPage (abstract) - Common auth form elements
+│   ├── LoginPage - Concrete login page
+│   └── RegisterPage - Concrete registration page
+└── SecurePage - Secure area page
+```
+
 ### BasePage (`src/pages/BasePage.ts`)
-Abstract base class providing common methods:
+Abstract base class providing common methods for all pages:
 
 ```typescript
 // Navigation
@@ -241,15 +252,50 @@ await page.screenshot(name);
 await page.getTitle();
 ```
 
-### LoginPage (`src/pages/LoginPage.ts`)
-Handles login page interactions:
-- `navigateToLogin()` - Navigate to login page
-- `login(username, password)` - Perform login
+### AuthPage (`src/pages/AuthPage.ts`)
+Abstract authentication page with **common form elements** shared between login and registration:
+
+**Common Elements:**
+- `usernameInput` - Username input field
+- `passwordInput` - Password input field
+- `errorMessage` - Error message display
+- `successMessage` - Success message display
+
+**Common Methods:**
 - `enterUsername(username)` - Enter username
 - `enterPassword(password)` - Enter password
+- `verifyErrorMessage()` - Check if error displayed
+- `getErrorMessageText()` - Get error text
+- `verifyUsernameFieldVisible()` - Verify field exists
+- `verifyPasswordFieldVisible()` - Verify field exists
+- `verifyUsernameInputFunctionality(value)` - Test username input
+- `verifyPasswordInputFunctionality(value)` - Test password input
+
+**Benefits of AuthPage:**
+- ✅ **DRY Principle** - No duplicate code between LoginPage and RegisterPage
+- ✅ **Maintainability** - Changes to auth form logic in one place
+- ✅ **Consistency** - All auth pages use same field selectors and methods
+- ✅ **Extensibility** - Easy to add more auth pages in the future
+
+### LoginPage (`src/pages/LoginPage.ts`)
+Extends **AuthPage** for login-specific functionality:
+- `navigateToLogin()` - Navigate to login page
+- `login(username, password)` - Perform complete login
 - `clickLoginButton()` - Click login button
 - `verifyLoginPageDisplayed()` - Verify page elements
 - `verifyErrorMessageText(message)` - Verify specific error message
+- `verifyPageTitle()` - Verify page title
+
+### RegisterPage (`src/pages/RegisterPage.ts`)
+Extends **AuthPage** for registration-specific functionality:
+- `navigateToRegister()` - Navigate to /register page
+- `registerUser(username, password)` - Complete registration flow
+- `enterConfirmPassword(password)` - Confirm password (register-specific)
+- `clickRegisterButton()` - Submit registration
+- `verifyRegistrationSuccess()` - Verify registration was successful
+- `verifyRegisterPageDisplayed()` - Verify all required fields are visible
+- `verifyConfirmPasswordFieldVisible()` - Verify field exists
+- `verifyConfirmPasswordInputFunctionality(value)` - Test confirm password input
 
 ### SecurePage (`src/pages/SecurePage.ts`)
 Handles the secure area after login:
@@ -281,6 +327,65 @@ Fixtures automatically:
 - Inject them into test context
 - Clean up after tests
 - Handle page lifecycle
+
+## 📝 Registration & Unique Username Generation
+
+The framework includes a registration test that validates the complete registration flow with automatic unique username generation.
+
+### Unique Username Format
+
+Usernames are generated with format `gmg-{random-hex}`:
+```typescript
+import { generateUniqueUsername } from '@utils/testHelpers';
+
+const username = generateUniqueUsername();
+// Example output: "gmg-a1b2c3d4e5f6"
+```
+
+**Benefits:**
+- ✅ Always unique - no conflicts between test runs
+- ✅ Recognizable - identifies test-created users
+- ✅ Traceable - can track which test created the user
+- ✅ Consistent format - `gmg-` prefix for easy identification
+
+### Registration Test Workflow
+
+The successful registration test validates:
+1. Navigate to /register page
+2. Display all required registration fields
+3. Generate unique username with UUID format
+4. Enter unique username, password, and confirmation
+5. Submit registration form
+6. Verify registration success
+7. **Verify login with newly registered credentials**
+8. Confirm user can access secure area
+9. Logout to close session
+
+This end-to-end flow ensures:
+- Registration actually creates a valid user
+- Credentials work for subsequent login
+- Full authentication workflow is validated
+
+### Example: Using Unique Usernames
+
+```typescript
+import { test, expect } from '@fixtures/baseTest';
+import { generateUniqueUsername } from '@utils/testHelpers';
+
+test('register and login', async ({ registerPage, loginPage, securePage }) => {
+  const username = generateUniqueUsername(); // gmg-a1b2c3d4e5f6
+  const password = 'SecurePassword123!';
+
+  // Register new user
+  await registerPage.navigateToRegister();
+  await registerPage.registerUser(username, password);
+
+  // Verify we can login
+  await loginPage.navigateToLogin();
+  await loginPage.login(username, password);
+  await securePage.verifySuccessMessage();
+});
+```
 
 ## 🐛 Debugging & Development
 
@@ -351,20 +456,31 @@ npm run format
 - **.prettierrc.json** - Code formatting rules
 
 ### Source Files
-- **BasePage.ts** - Base class with 15+ reusable methods
-- **LoginPage.ts** - Login page object with 8+ methods
-- **SecurePage.ts** - Secure page object with verification methods
-- **ExamplePage.ts** - Example domain page object
-- **testHelpers.ts** - Utility functions for tests
+- **BasePage.ts** - Base class with 15+ reusable methods for all pages
+- **AuthPage.ts** - Abstract auth page with common form elements (reduces duplication)
+- **LoginPage.ts** - Login page object extending AuthPage (only login-specific methods)
+- **SecurePage.ts** - Secure page object extending BasePage
+- **RegisterPage.ts** - Registration page object extending AuthPage (only register-specific methods)
+- **testHelpers.ts** - Utility functions: unique username generation, retry logic, etc.
 - **pageFixtures.ts** - Custom test fixtures
 - **baseTest.ts** - Extended test interface
 
 ## ✅ Test Results
 
-All 10 tests currently passing:
+All 15 tests currently passing:
 ```
-✓ Example Domain Tests (3 passing)
 ✓ Login Page Tests (7 passing)
+  - Display login page
+  - Successful login with valid credentials + logout
+  - Error message with invalid username
+  - Username and password field visibility
+  - Input field data entry tests
+
+✓ Registration Page Tests (8 passing)
+  - Display registration page
+  - Successful registration with unique username (full workflow)
+  - Field visibility tests
+  - Input field data entry tests
 ```
 
 ## 💡 Best Practices
@@ -416,7 +532,36 @@ test('should display error when username is invalid');
 test('test login');
 ```
 
-### 5. **Keep Tests Independent**
+### 5. **Use Class Hierarchies to Eliminate Duplication**
+```typescript
+// ✅ Good - Eliminate duplicate code
+abstract class AuthPage extends BasePage {
+  readonly usernameInput: Locator;
+  readonly passwordInput: Locator;
+  async enterUsername(username: string): Promise<void> { ... }
+}
+
+class LoginPage extends AuthPage { /* login-specific only */ }
+class RegisterPage extends AuthPage { /* register-specific only */ }
+
+// ❌ Avoid - Duplicate code in each page
+class LoginPage extends BasePage {
+  async enterUsername(...) { ... }
+  async enterPassword(...) { ... }
+}
+
+class RegisterPage extends BasePage {
+  async enterUsername(...) { ... }  // duplicate!
+  async enterPassword(...) { ... }  // duplicate!
+}
+```
+
+**When to Create Intermediate Classes:**
+- Multiple pages share common elements
+- Same interactions needed across pages
+- Changes should affect all pages uniformly
+
+### 6. **Keep Tests Independent**
 Each test should:
 - Not depend on other tests
 - Set up its own state
@@ -450,6 +595,23 @@ Steps validated:
 ### Invalid Username Error Test
 - Enters invalid credentials
 - Verifies error message: "Your username is invalid!"
+
+### Successful Registration Test
+The test validates the complete registration workflow:
+1. ✅ Generate unique username: `gmg-{random-hex}`
+2. ✅ Navigate to /register page
+3. ✅ Verify all registration fields displayed
+4. ✅ Enter unique username (e.g., "gmg-a1b2c3d4e5f6")
+5. ✅ Enter password: "SuperSecretPassword!"
+6. ✅ Enter confirm password
+7. ✅ Click register button
+8. ✅ Verify registration success
+9. ✅ **Login with newly created credentials**
+10. ✅ Verify successful login to /secure page
+11. ✅ Confirm success message visible
+12. ✅ Logout to close session
+
+This end-to-end flow ensures the registered user can immediately login with their credentials.
 
 ## 🤝 Contributing
 

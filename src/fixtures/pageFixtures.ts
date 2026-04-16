@@ -1,6 +1,7 @@
-import { test as base, Page } from '@playwright/test';
+import { test as base } from '@playwright/test';
 import { LoginPage } from '@pages/LoginPage';
 import { SecurePage } from '@pages/SecurePage';
+import { RegisterPage } from '@pages/RegisterPage';
 
 /**
  * Extend test with custom fixtures for page objects
@@ -9,6 +10,7 @@ import { SecurePage } from '@pages/SecurePage';
 type PageFixtures = {
   loginPage: LoginPage;
   securePage: SecurePage;
+  registerPage: RegisterPage;
 };
 
 /**
@@ -24,6 +26,11 @@ export const test = base.extend<PageFixtures>({
   securePage: async ({ page }, use) => {
     const securePage = new SecurePage(page);
     await use(securePage);
+  },
+
+  registerPage: async ({ page }, use) => {
+    const registerPage = new RegisterPage(page);
+    await use(registerPage);
   },
 });
 

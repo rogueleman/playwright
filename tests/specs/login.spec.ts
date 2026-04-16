@@ -56,34 +56,24 @@ test.describe('Login Page Tests', () => {
   });
 
   test('should have username input field', async ({ loginPage }) => {
-    // Verify username input is visible
-    const isUsernameVisible = await loginPage.isElementVisible('#username');
-    expect(isUsernameVisible).toBe(true);
+    // Use the inherited method from AuthPage
+    await loginPage.verifyUsernameFieldVisible();
   });
 
   test('should have password input field', async ({ loginPage }) => {
-    // Verify password input is visible
-    const isPasswordVisible = await loginPage.isElementVisible('#password');
-    expect(isPasswordVisible).toBe(true);
+    // Use the inherited method from AuthPage
+    await loginPage.verifyPasswordFieldVisible();
   });
 
   test('should be able to enter text in username field', async ({ loginPage }) => {
-    // Enter username
+    // Use the inherited method from AuthPage
     const testUsername = 'testuser123';
-    await loginPage.enterUsername(testUsername);
-
-    // Verify the value was entered
-    const usernameValue = await loginPage.page.locator('#username').inputValue();
-    expect(usernameValue).toBe(testUsername);
+    await loginPage.verifyUsernameInputFunctionality(testUsername);
   });
 
   test('should be able to enter text in password field', async ({ loginPage }) => {
-    // Enter password
+    // Use the inherited method from AuthPage
     const testPassword = 'testpass123';
-    await loginPage.enterPassword(testPassword);
-
-    // Verify the value was entered
-    const passwordValue = await loginPage.page.locator('#password').inputValue();
-    expect(passwordValue).toBe(testPassword);
+    await loginPage.verifyPasswordInputFunctionality(testPassword);
   });
 });
