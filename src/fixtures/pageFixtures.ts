@@ -3,6 +3,7 @@ import { LoginPage } from '@pages/LoginPage';
 import { SecurePage } from '@pages/SecurePage';
 import { RegisterPage } from '@pages/RegisterPage';
 import { DynamicTablePage } from '@pages/DynamicTablePage';
+import { BMIPage } from '@pages/BMIPage';
 
 /**
  * Extend test with custom fixtures for page objects
@@ -13,6 +14,7 @@ type PageFixtures = {
   securePage: SecurePage;
   registerPage: RegisterPage;
   dynamicTablePage: DynamicTablePage;
+  bmiPage: BMIPage;
 };
 
 /**
@@ -38,6 +40,11 @@ export const test = base.extend<PageFixtures>({
   dynamicTablePage: async ({ page }, use) => {
     const dynamicTablePage = new DynamicTablePage(page);
     await use(dynamicTablePage);
+  },
+
+  bmiPage: async ({ page }, use) => {
+    const bmiPage = new BMIPage(page);
+    await use(bmiPage);
   },
 });
 

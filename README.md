@@ -10,6 +10,7 @@ A professional, production-ready Playwright test automation framework built with
 - [Prerequisites](#prerequisites)
 - [Setup & Installation](#setup--installation)
 - [Running Tests](#running-tests)
+- [Test Suite](#test-suite)
 - [Creating New Tests](#creating-new-tests)
 - [Page Objects](#page-objects)
 - [Test Fixtures](#test-fixtures)
@@ -50,7 +51,9 @@ playwright-framework/
 │   │   ├── AuthPage.ts              # Abstract auth page (common form elements)
 │   │   ├── LoginPage.ts             # Login page object (extends AuthPage)
 │   │   ├── RegisterPage.ts          # Register page object (extends AuthPage)
-│   │   └── SecurePage.ts            # Secure area page object (extends BasePage)
+│   │   ├── SecurePage.ts            # Secure area page object (extends BasePage)
+│   │   ├── DynamicTablePage.ts      # Dynamic table page object (extends BasePage)
+│   │   └── BMIPage.ts               # BMI calculator page object (extends BasePage)
 │   ├── fixtures/
 │   │   ├── pageFixtures.ts          # Custom test fixtures for page objects
 │   │   └── baseTest.ts              # Extended test interface
@@ -61,7 +64,9 @@ playwright-framework/
 ├── tests/
 │   └── specs/
 │       ├── login.spec.ts            # Login page test suite (7 tests)
-│       └── register.spec.ts         # Registration page test suite (8 tests)
+│       ├── register.spec.ts         # Registration page test suite (8 tests)
+│       ├── dynamic-table.spec.ts    # Dynamic table test suite (8 tests)
+│       └── bmi.spec.ts              # BMI calculator test suite (4 tests)
 ├── test-results/                    # Test execution results (generated)
 ├── .vscode/
 │   ├── extensions.json              # Recommended VS Code extensions
@@ -83,62 +88,105 @@ playwright-framework/
 
 ## 🚀 Setup & Installation
 
-### 1. Clone or navigate to the project
+### Quick Start
+
+#### 1. Navigate to the project
 ```bash
 cd ~/playwright-framework
 ```
 
-### 2. Install dependencies
+#### 2. Install dependencies
 ```bash
 npm install
 ```
 
-### 3. Install Playwright browsers
+#### 3. Install Playwright browsers
 ```bash
 npm run install:browsers
 ```
 
-### 4. (Optional) Open in VS Code
+#### 4. (Optional) Open in VS Code
 ```bash
 code .
 ```
 
+### Verify Installation
+
+Run a quick test to verify everything is set up correctly:
+```bash
+npm test -- login.spec.ts --grep "should display" | head -20
+```
+
+You should see a test pass within a few seconds.
+
 ## ▶️ Running Tests
 
-### Run all tests
+### All Tests
+Run the entire test suite:
 ```bash
 npm test
 ```
 
-### Run tests in headed mode (visible browser)
+### Specific Test File
+Run tests from a single file:
+```bash
+npm test tests/specs/login.spec.ts
+npm test tests/specs/bmi.spec.ts
+npm test tests/specs/dynamic-table.spec.ts
+```
+
+### Tests Matching a Pattern
+Run tests by name pattern:
+```bash
+npm test -- --grep "login"
+npm test -- --grep "BMI"
+npm test -- --grep "dynamic"
+```
+
+### Headed Mode (Visible Browser)
+Watch the browser run the tests:
 ```bash
 npm run test:headed
 ```
 
-### Run specific test file
-```bash
-npm test tests/specs/login.spec.ts
-```
-
-### Run tests matching a pattern
-```bash
-npm test -- --grep "login"
-```
-
-### Run tests with debugger
+### Debug Mode
+Step through tests with interactive debugger:
 ```bash
 npm run test:debug
 ```
 
-### Run tests with UI mode (interactive)
+### UI Mode
+Interactive test explorer with live browser:
 ```bash
 npm run test:ui
 ```
 
-### View test results
+### View Test Results
+Open the HTML test report in your browser:
 ```bash
 npm run test:report
 ```
+
+### Type Checking
+Check TypeScript without running tests:
+```bash
+npm run type-check
+```
+
+### Code Quality
+Run linter:
+```bash
+npm run lint
+```
+
+Format code with Prettier:
+```bash
+npm run format
+```
+
+## 📊 Test Suite
+
+This framework includes 27 automated tests across 4 test suites:
 
 ## 📝 Creating New Tests
 
@@ -305,6 +353,45 @@ Handles the secure area after login:
 - `verifySecurePageUrl()` - Verify URL
 - `clickLogout()` - Perform logout
 
+### DynamicTablePage (`src/pages/DynamicTablePage.ts`)
+Handles the dynamic table page where rows and columns can change positions:
+- `navigateToDynamicTable()` - Navigate to /dynamic-table
+- `verifyPageDisplayed()` - Verify table is visible
+- `findCpuColumnIndex()` - Dynamically find CPU column index
+- `findChromeRowIndex()` - Dynamically find Chrome row index
+- `getChromeRowCpuValue()` - Extract CPU value from Chrome row
+- `getChromeCpuLabelValue()` - Extract CPU value from label element
+- `compareCpuValues()` - Compare values and verify they match
+- `printTableInfo()` - Debug method to log table structure
+- `printLabelInfo()` - Debug method to log label information
+- `verifyChromeCpuValueMatchesLabel()` - Complete automation: extract, compare, and assert
+
+**Key Features:**
+- ✅ Dynamic locator finding (handles columns/rows in any position)
+- ✅ CPU value extraction and comparison
+- ✅ Label verification with debugging output
+- ✅ Handles dynamic changes on page reload
+
+### BMIPage (`src/pages/BMIPage.ts`)
+Handles the BMI calculator page with automated calculation verification:
+- `navigateToBMI()` - Navigate to /bmi
+- `setGender(gender)` - Set gender (Male/Female)
+- `setAge(age)` - Set age value
+- `setHeight(height)` - Set height in centimeters
+- `setWeight(weight)` - Set weight in kilograms
+- `clickCalculate()` - Click Calculate button and wait for results
+- `getResultFromDiv()` - Extract result from #BMI span
+- `getResultFromBoldElement()` - Extract result from styled element
+- `calculateBMI(weight, height)` - Calculate expected BMI manually
+- `verifyBMICalculation()` - Complete automation: set inputs, calculate, verify both elements
+
+**Key Features:**
+- ✅ BMI formula verification: `BMI = Weight / ((Height/100)²)`
+- ✅ Result rounded to 1 decimal place
+- ✅ Dual assertions (divResult and styled element)
+- ✅ Comprehensive logging of inputs and calculations
+- ✅ Numeric value extraction with regex pattern matching
+
 ## 🔌 Test Fixtures
 
 Fixtures provide automatic dependency injection of page objects into tests.
@@ -433,19 +520,36 @@ npm run format
 
 ## 📦 Project Contents
 
-### Test Files (10 tests total)
-- **example.spec.ts** (3 tests)
-  - Load example.com homepage
-  - Verify heading text
-  - Verify page URL
-
+### Test Files (27 tests total)
 - **login.spec.ts** (7 tests)
   - Display login page
-  - **Successful login with valid credentials** (8-step verification)
+  - **Successful login with valid credentials + logout** (8-step verification)
   - Error message display with invalid username
   - Username input field functionality
   - Password input field functionality
   - Input field data entry tests
+
+- **register.spec.ts** (8 tests)
+  - Display registration page
+  - **Successful registration with unique username** (full end-to-end workflow)
+  - Field visibility tests
+  - Input field data entry tests
+
+- **dynamic-table.spec.ts** (8 tests)
+  - Display dynamic table page
+  - Find CPU column with % sign (handles dynamic position)
+  - Find Chrome row (handles dynamic position)
+  - Extract CPU value from Chrome row
+  - Extract CPU value from label
+  - Compare and verify CPU values match
+  - **Complete automation test** (with table and label logging)
+  - Handle dynamic table structure changes on reload
+
+- **bmi.spec.ts** (4 tests)
+  - **Calculate BMI correctly** (complete automation with input logging and calculation verification)
+  - Verify divResult element contains correct BMI value
+  - Verify bold styled element contains correct BMI value
+  - Verify both elements contain matching BMI values
 
 ### Configuration Files
 - **playwright.config.ts** - Playwright runner configuration with baseURL
@@ -459,15 +563,17 @@ npm run format
 - **BasePage.ts** - Base class with 15+ reusable methods for all pages
 - **AuthPage.ts** - Abstract auth page with common form elements (reduces duplication)
 - **LoginPage.ts** - Login page object extending AuthPage (only login-specific methods)
-- **SecurePage.ts** - Secure page object extending BasePage
 - **RegisterPage.ts** - Registration page object extending AuthPage (only register-specific methods)
+- **SecurePage.ts** - Secure page object extending BasePage
+- **DynamicTablePage.ts** - Dynamic table page object with CPU value extraction
+- **BMIPage.ts** - BMI calculator page object with formula verification
 - **testHelpers.ts** - Utility functions: unique username generation, retry logic, etc.
-- **pageFixtures.ts** - Custom test fixtures
-- **baseTest.ts** - Extended test interface
+- **pageFixtures.ts** - Custom test fixtures for all page objects
+- **baseTest.ts** - Extended test interface with custom fixtures
 
 ## ✅ Test Results
 
-All 15 tests currently passing:
+All 27 tests currently passing:
 ```
 ✓ Login Page Tests (7 passing)
   - Display login page
@@ -481,6 +587,22 @@ All 15 tests currently passing:
   - Successful registration with unique username (full workflow)
   - Field visibility tests
   - Input field data entry tests
+
+✓ Dynamic Table Tests (8 passing)
+  - Display dynamic table page
+  - Find CPU column with % sign
+  - Find Chrome row in table
+  - Extract CPU value from Chrome row
+  - Extract CPU value from label
+  - Compare and verify CPU values match
+  - Complete automation test with logging
+  - Handle dynamic table structure changes
+
+✓ BMI Calculator Tests (4 passing)
+  - Calculate BMI correctly (complete automation with logging)
+  - Verify divResult element contains correct BMI value
+  - Verify bold styled element contains correct BMI value
+  - Verify both elements contain matching BMI values
 ```
 
 ## 💡 Best Practices
@@ -636,6 +758,7 @@ MIT
 ---
 
 **Last Updated:** 2026-04-16  
-**Framework Version:** 1.0.0  
+**Framework Version:** 2.0.0  
+**Total Tests:** 27  
 **Playwright Version:** Latest  
 **Node Version:** 16+
