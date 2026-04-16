@@ -90,22 +90,34 @@ playwright-framework/
 
 ### Quick Start
 
-#### 1. Navigate to the project
+#### 1. Clone the repository
+```bash
+git clone https://github.com/rogueleman/playwright.git
+cd playwright-framework
+```
+
+Or if you already have the repository:
+```bash
+cd ~/playwright-framework
+git pull origin main
+```
+
+#### 2. Navigate to the project
 ```bash
 cd ~/playwright-framework
 ```
 
-#### 2. Install dependencies
+#### 3. Install dependencies
 ```bash
 npm install
 ```
 
-#### 3. Install Playwright browsers
+#### 4. Install Playwright browsers
 ```bash
 npm run install:browsers
 ```
 
-#### 4. (Optional) Open in VS Code
+#### 5. (Optional) Open in VS Code
 ```bash
 code .
 ```
