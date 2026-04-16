@@ -38,6 +38,9 @@ test.describe('Login Page Tests', () => {
 
     // Step 8: Verify that a Logout button is displayed
     await securePage.verifyLogoutButtonVisible();
+
+    // Step 9: Logout to close the session
+    await securePage.clickLogout();
   });
 
   test('should display error message with invalid username', async ({ loginPage }) => {
