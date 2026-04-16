@@ -2,6 +2,7 @@ import { test as base } from '@playwright/test';
 import { LoginPage } from '@pages/LoginPage';
 import { SecurePage } from '@pages/SecurePage';
 import { RegisterPage } from '@pages/RegisterPage';
+import { DynamicTablePage } from '@pages/DynamicTablePage';
 
 /**
  * Extend test with custom fixtures for page objects
@@ -11,6 +12,7 @@ type PageFixtures = {
   loginPage: LoginPage;
   securePage: SecurePage;
   registerPage: RegisterPage;
+  dynamicTablePage: DynamicTablePage;
 };
 
 /**
@@ -31,6 +33,11 @@ export const test = base.extend<PageFixtures>({
   registerPage: async ({ page }, use) => {
     const registerPage = new RegisterPage(page);
     await use(registerPage);
+  },
+
+  dynamicTablePage: async ({ page }, use) => {
+    const dynamicTablePage = new DynamicTablePage(page);
+    await use(dynamicTablePage);
   },
 });
 
