@@ -44,7 +44,7 @@ This framework automates testing for **https://practice.expandtesting.com**, fea
 ## 📁 Project Structure
 
 ```
-playwright-framework/
+playwright/
 ├── src/
 │   ├── pages/
 │   │   ├── BasePage.ts              # Abstract base class for all page objects
@@ -93,18 +93,18 @@ playwright-framework/
 #### 1. Clone the repository
 ```bash
 git clone https://github.com/rogueleman/playwright.git
-cd playwright-framework
+cd playwright
 ```
 
 Or if you already have the repository:
 ```bash
-cd ~/playwright-framework
+cd ~/playwright
 git pull origin main
 ```
 
 #### 2. Navigate to the project
 ```bash
-cd ~/playwright-framework
+cd ~/playwright
 ```
 
 #### 3. Install dependencies
