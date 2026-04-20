@@ -1,5 +1,13 @@
 node_modules/
+dist/
 playwright-report/
 test-results/
+coverage/
 .env
+.env.local
 .vscode/
+.idea/
+*.log
+*.swp
+*.swo
+.DS_Store

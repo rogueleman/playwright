@@ -1,7 +1,6 @@
-const { devices } = require('@playwright/test');
+import { defineConfig, devices } from '@playwright/test';
 
-/** @type {import('@playwright/test').PlaywrightTestConfig} */
-module.exports = {
+export default defineConfig({
   testDir: './tests',
   timeout: 30 * 1000,
   expect: {
