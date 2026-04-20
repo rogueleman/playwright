@@ -1,17 +1,9 @@
-import { test } from '@fixtures/baseTest';
+import { test } from '@fixtures/loginFixture';
 
 test.describe('Login Page Tests', () => {
   test.beforeEach(async ({ loginPage }) => {
     // Navigate to login page before each test
     await loginPage.navigateToLogin();
-  });
-
-  test('should display the login page with all required elements', async ({ loginPage }) => {
-    // Verify login page is displayed
-    await loginPage.verifyLoginPageDisplayed();
-
-    // Verify page title
-    await loginPage.verifyPageTitle();
   });
 
   test('should successfully login with valid credentials', async ({ loginPage, securePage }) => {

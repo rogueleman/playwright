@@ -1,5 +1,6 @@
 import { Page, Locator, expect } from '@playwright/test';
 import { BasePage } from './BasePage';
+import { PATHS } from '@config/constants';
 
 /**
  * Page Object Model for Secure Page at practice.expandtesting.com/secure
@@ -22,7 +23,7 @@ export class SecurePage extends BasePage {
    * Navigate to the secure page
    */
   async navigateToSecurePage(): Promise<void> {
-    await this.goto('/secure');
+    await this.goto(PATHS.SECURE);
   }
 
   /**
@@ -51,7 +52,7 @@ export class SecurePage extends BasePage {
    */
   async clickLogout(): Promise<void> {
     await this.logoutButton.click();
-    await this.page.waitForLoadState('load');
+    // Playwright auto-waits for navigation
   }
 
   /**

@@ -1,5 +1,6 @@
 import { Page, Locator, expect } from '@playwright/test';
 import { BasePage } from './BasePage';
+import { PATHS } from '@config/constants';
 
 /**
  * Page Object Model for BMI Calculator Page at practice.expandtesting.com/bmi
@@ -35,7 +36,7 @@ export class BMIPage extends BasePage {
    * Navigate to the BMI calculator page
    */
   async navigateToBMI(): Promise<void> {
-    await this.goto('/bmi');
+    await this.goto(PATHS.BMI);
   }
 
   /**

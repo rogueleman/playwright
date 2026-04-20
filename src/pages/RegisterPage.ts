@@ -1,5 +1,6 @@
 import { Page, Locator, expect } from '@playwright/test';
 import { AuthPage } from './AuthPage';
+import { PATHS } from '@config/constants';
 
 /**
  * Page Object Model for Register Page at practice.expandtesting.com/register
@@ -25,7 +26,7 @@ export class RegisterPage extends AuthPage {
    * Navigate to the register page
    */
   async navigateToRegister(): Promise<void> {
-    await this.goto('/register');
+    await this.goto(PATHS.REGISTER);
   }
 
   /**
@@ -60,29 +61,22 @@ export class RegisterPage extends AuthPage {
     await this.enterPassword(password);
     await this.enterConfirmPassword(password);
     await this.clickRegisterButton();
-    await this.page.waitForLoadState('load');
+    // Playwright auto-waits for navigation
   }
 
   /**
    * Verify successful registration message
    */
   async verifyRegistrationSuccess(): Promise<void> {
-    // Wait for success message to be visible
-    await this.page.waitForTimeout(1000); // Wait for page to process
-
     // Use smart locator for success message
     const successMessage = this.page.getByText(/successfully registered|registered successfully/i);
 
     let found = false;
     try {
-      if (await successMessage.isVisible({ timeout: 2000 })) {
-        found = true;
-      }
+      // Wait for the success message to be visible (Playwright auto-waits)
+      await successMessage.waitFor({ state: 'visible', timeout: 5000 });
+      found = true;
     } catch {
-      // Continue to check other indicators
-    }
-
-    if (!found) {
       // If no success message found, verify we were redirected (registration might redirect automatically)
       // This is a common pattern in some forms
       const currentUrl = this.page.url();

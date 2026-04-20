@@ -1,5 +1,6 @@
 import { Page, Locator, expect } from '@playwright/test';
 import { AuthPage } from './AuthPage';
+import { PATHS } from '@config/constants';
 
 /**
  * Page Object Model for Login Page at practice.expandtesting.com/login
@@ -21,7 +22,7 @@ export class LoginPage extends AuthPage {
    * Navigate to the login page
    */
   async navigateToLogin(): Promise<void> {
-    await this.goto('/login');
+    await this.goto(PATHS.LOGIN);
   }
 
   /**
@@ -31,8 +32,7 @@ export class LoginPage extends AuthPage {
     await this.usernameInput.fill(username);
     await this.passwordInput.fill(password);
     await this.loginButton.click();
-    // Wait for page load after login
-    await this.page.waitForLoadState('load');
+    // Playwright auto-waits for navigation; no explicit wait needed
   }
 
   /**

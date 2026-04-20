@@ -1,5 +1,6 @@
 import { Page, Locator, expect } from '@playwright/test';
 import { BasePage } from './BasePage';
+import { PATHS } from '@config/constants';
 
 /**
  * Page Object Model for Dynamic Table Page at practice.expandtesting.com/dynamic-table
@@ -26,7 +27,7 @@ export class DynamicTablePage extends BasePage {
    * Navigate to the dynamic table page
    */
   async navigateToDynamicTable(): Promise<void> {
-    await this.goto('/dynamic-table');
+    await this.goto(PATHS.DYNAMIC_TABLE);
   }
 
   /**

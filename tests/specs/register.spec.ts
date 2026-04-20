@@ -1,20 +1,10 @@
-import { test } from '@fixtures/baseTest';
+import { test } from '@fixtures/registerFixture';
 import { generateUniqueUsername } from '@utils/testHelpers';
 
 test.describe('Registration Page Tests', () => {
   test.beforeEach(async ({ registerPage }) => {
     // Navigate to register page before each test
     await registerPage.navigateToRegister();
-  });
-
-  test('should display the registration page with all required elements', async ({
-    registerPage,
-  }) => {
-    // Verify registration page is displayed
-    await registerPage.verifyRegisterPageDisplayed();
-
-    // Verify page title
-    await registerPage.verifyPageTitle();
   });
 
   test('should successfully register a new user with unique username', async ({

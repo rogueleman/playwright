@@ -1,4 +1,5 @@
 import { defineConfig, devices } from '@playwright/test';
+import { BASE_URL } from './src/config/constants';
 
 /**
  * Playwright Test configuration
@@ -19,7 +20,7 @@ export default defineConfig({
     ['html', { outputFolder: 'playwright-report', open: 'never' }],
   ],
   use: {
-    baseURL: 'https://practice.expandtesting.com',
+    baseURL: BASE_URL,
     actionTimeout: 0,
     navigationTimeout: 30 * 1000,
     trace: 'on-first-retry',

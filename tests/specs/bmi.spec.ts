@@ -1,4 +1,4 @@
-import { test } from '@fixtures/baseTest';
+import { test } from '@fixtures/bmiFixture';
 
 test.describe('BMI Calculator Tests', () => {
   test.beforeEach(async ({ bmiPage }) => {
