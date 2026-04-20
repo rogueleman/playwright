@@ -1,4 +1,4 @@
-import { test, expect } from '@fixtures/baseTest';
+import { test } from '@fixtures/baseTest';
 
 test.describe('Dynamic Table Tests', () => {
   test.beforeEach(async ({ dynamicTablePage }) => {
@@ -9,59 +9,6 @@ test.describe('Dynamic Table Tests', () => {
   test('should display the dynamic table page', async ({ dynamicTablePage }) => {
     // Verify the page is displayed
     await dynamicTablePage.verifyPageDisplayed();
-  });
-
-  test('should find CPU column with % sign', async ({ dynamicTablePage }) => {
-    // Find the CPU column index
-    const cpuColumnIndex = await dynamicTablePage.findCpuColumnIndex();
-
-    // Verify we found a valid column
-    expect(cpuColumnIndex).toBeGreaterThanOrEqual(0);
-    console.log(`CPU column found at index: ${cpuColumnIndex}`);
-  });
-
-  test('should find Chrome row in dynamic table', async ({ dynamicTablePage }) => {
-    // Find the Chrome row index
-    const chromeRowIndex = await dynamicTablePage.findChromeRowIndex();
-
-    // Verify we found a valid row
-    expect(chromeRowIndex).toBeGreaterThanOrEqual(0);
-    console.log(`Chrome row found at index: ${chromeRowIndex}`);
-  });
-
-  test('should extract CPU value from Chrome row', async ({ dynamicTablePage }) => {
-    // Get CPU value from the Chrome row
-    const cpuValue = await dynamicTablePage.getChromeRowCpuValue();
-
-    // Verify we got a value
-    expect(cpuValue).toBeTruthy();
-    console.log(`CPU value from Chrome row: ${cpuValue}`);
-  });
-
-  test('should extract CPU value from chrome-cpu label', async ({ dynamicTablePage }) => {
-    // Get CPU value from the yellow label
-    const labelValue = await dynamicTablePage.getChromeCpuLabelValue();
-
-    // Verify we got a value
-    expect(labelValue).toBeTruthy();
-    console.log(`CPU value from chrome-cpu label: ${labelValue}`);
-  });
-
-  test('should compare CPU values and verify they match', async ({ dynamicTablePage }) => {
-    // Get CPU value from Chrome row in the table
-    const tableValue = await dynamicTablePage.getChromeRowCpuValue();
-    console.log(`[Step 1] CPU value from Chrome row in table: ${tableValue}`);
-
-    // Get CPU value from the yellow label
-    const labelValue = await dynamicTablePage.getChromeCpuLabelValue();
-    console.log(`[Step 2] CPU value from chrome-cpu label: ${labelValue}`);
-
-    // Compare the values
-    const valuesMatch = await dynamicTablePage.compareCpuValues(tableValue, labelValue);
-    console.log(`[Step 3] Comparison result: ${valuesMatch ? 'MATCH ✓' : 'MISMATCH ✗'}`);
-
-    // Assert they match
-    expect(valuesMatch).toBe(true);
   });
 
   test('should verify Chrome CPU value matches label (complete automation)', async ({

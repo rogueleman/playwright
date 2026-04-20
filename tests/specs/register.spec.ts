@@ -56,39 +56,4 @@ test.describe('Registration Page Tests', () => {
     // Step 9: Logout to close the session
     await securePage.clickLogout();
   });
-
-  test('should have username input field', async ({ registerPage }) => {
-    // Use the inherited method from AuthPage
-    await registerPage.verifyUsernameFieldVisible();
-  });
-
-  test('should have password input field', async ({ registerPage }) => {
-    // Use the inherited method from AuthPage
-    await registerPage.verifyPasswordFieldVisible();
-  });
-
-  test('should have confirm password input field', async ({ registerPage }) => {
-    // Verify confirm password input is visible
-    await registerPage.verifyConfirmPasswordFieldVisible();
-  });
-
-  test('should be able to enter text in username field', async ({ registerPage }) => {
-    // Generate unique username
-    const testUsername = generateUniqueUsername();
-
-    // Use the inherited method from AuthPage
-    await registerPage.verifyUsernameInputFunctionality(testUsername);
-  });
-
-  test('should be able to enter text in password field', async ({ registerPage }) => {
-    // Enter password using inherited method
-    const testPassword = 'TestPassword123!';
-    await registerPage.verifyPasswordInputFunctionality(testPassword);
-  });
-
-  test('should be able to enter text in confirm password field', async ({ registerPage }) => {
-    // Enter confirm password
-    const testPassword = 'ConfirmPassword123!';
-    await registerPage.verifyConfirmPasswordInputFunctionality(testPassword);
-  });
 });

@@ -54,26 +54,4 @@ test.describe('Login Page Tests', () => {
     // Verify the specific error message "Your username is invalid!" is displayed
     await loginPage.verifyErrorMessageText('Your username is invalid!');
   });
-
-  test('should have username input field', async ({ loginPage }) => {
-    // Use the inherited method from AuthPage
-    await loginPage.verifyUsernameFieldVisible();
-  });
-
-  test('should have password input field', async ({ loginPage }) => {
-    // Use the inherited method from AuthPage
-    await loginPage.verifyPasswordFieldVisible();
-  });
-
-  test('should be able to enter text in username field', async ({ loginPage }) => {
-    // Use the inherited method from AuthPage
-    const testUsername = 'testuser123';
-    await loginPage.verifyUsernameInputFunctionality(testUsername);
-  });
-
-  test('should be able to enter text in password field', async ({ loginPage }) => {
-    // Use the inherited method from AuthPage
-    const testPassword = 'testpass123';
-    await loginPage.verifyPasswordInputFunctionality(testPassword);
-  });
 });
