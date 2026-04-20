@@ -82,7 +82,7 @@ playwright/
 
 ## 📋 Prerequisites
 
-- **Node.js** 16+ installed
+- **Node.js** 20+ installed
 - **npm** 7+ or **yarn** package manager
 - A code editor (VS Code recommended)
 
