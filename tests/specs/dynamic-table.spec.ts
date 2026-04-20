@@ -64,7 +64,9 @@ test.describe('Dynamic Table Tests', () => {
     expect(valuesMatch).toBe(true);
   });
 
-  test('should verify Chrome CPU value matches label (complete automation)', async ({ dynamicTablePage }) => {
+  test('should verify Chrome CPU value matches label (complete automation)', async ({
+    dynamicTablePage,
+  }) => {
     // Print table info for debugging
     await dynamicTablePage.printTableInfo();
 

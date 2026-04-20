@@ -32,7 +32,7 @@ test.describe('BMI Calculator Tests', () => {
     const weightNum = parseFloat(weight);
     const expectedBMI = bmiPage.calculateBMI(weightNum, heightNum);
 
-    console.log(`\n=== Test: Verify divResult Element ===`);
+    console.log('\n=== Test: Verify divResult Element ===');
     console.log(`Input: Gender=${gender}, Age=${age}, Height=${height}cm, Weight=${weight}kg`);
     console.log(`Expected BMI: ${expectedBMI}`);
 
@@ -48,7 +48,7 @@ test.describe('BMI Calculator Tests', () => {
     const divMatch = resultFromDiv.match(/\d+\.\d+/);
     const resultDivNumeric = divMatch ? parseFloat(divMatch[0]) : 0;
     console.log(`Parsed numeric value: ${resultDivNumeric}`);
-    console.log(`================================\n`);
+    console.log('================================\n');
 
     expect(resultDivNumeric).toBe(expectedBMI);
   });
@@ -63,7 +63,7 @@ test.describe('BMI Calculator Tests', () => {
     const weightNum = parseFloat(weight);
     const expectedBMI = bmiPage.calculateBMI(weightNum, heightNum);
 
-    console.log(`\n=== Test: Verify Bold Styled Element ===`);
+    console.log('\n=== Test: Verify Bold Styled Element ===');
     console.log(`Input: Gender=${gender}, Age=${age}, Height=${height}cm, Weight=${weight}kg`);
     console.log(`Expected BMI: ${expectedBMI}`);
 
@@ -79,7 +79,7 @@ test.describe('BMI Calculator Tests', () => {
     const boldMatch = resultFromBold.match(/\d+\.\d+/);
     const resultBoldNumeric = boldMatch ? parseFloat(boldMatch[0]) : 0;
     console.log(`Parsed numeric value: ${resultBoldNumeric}`);
-    console.log(`=====================================\n`);
+    console.log('=====================================\n');
 
     expect(resultBoldNumeric).toBe(expectedBMI);
   });
@@ -90,7 +90,7 @@ test.describe('BMI Calculator Tests', () => {
     const height = '170';
     const weight = '65';
 
-    console.log(`\n=== Test: Verify Both Elements Match ===`);
+    console.log('\n=== Test: Verify Both Elements Match ===');
     console.log(`Input: Gender=${gender}, Age=${age}, Height=${height}cm, Weight=${weight}kg`);
 
     await bmiPage.setGender(gender);
@@ -113,7 +113,7 @@ test.describe('BMI Calculator Tests', () => {
 
     console.log(`#BMI span numeric value: ${resultDivNumeric}`);
     console.log(`Bold element numeric value: ${resultBoldNumeric}`);
-    console.log(`====================================\n`);
+    console.log('====================================\n');
 
     // Both should match each other
     expect(resultDivNumeric).toBe(resultBoldNumeric);

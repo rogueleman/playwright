@@ -15,8 +15,12 @@ export abstract class AuthPage extends BasePage {
   constructor(page: Page) {
     super(page);
     // Define common selectors that work across both login and registration pages
-    this.usernameInput = page.locator('#username, input[name="username"], input[placeholder*="Username" i]');
-    this.passwordInput = page.locator('#password, input[name="password"], input[placeholder*="Password" i]');
+    this.usernameInput = page.locator(
+      '#username, input[name="username"], input[placeholder*="Username" i]'
+    );
+    this.passwordInput = page.locator(
+      '#password, input[name="password"], input[placeholder*="Password" i]'
+    );
     this.errorMessage = page.locator('.error, .alert-danger, [class*="error"]');
     this.successMessage = page.locator('.success, .alert-success, [class*="success"]');
   }
@@ -47,7 +51,7 @@ export abstract class AuthPage extends BasePage {
    */
   async getErrorMessageText(): Promise<string> {
     const errorElement = this.page.locator('[class*="error"], [class*="invalid"], .alert');
-    return await errorElement.textContent() || '';
+    return (await errorElement.textContent()) || '';
   }
 
   /**

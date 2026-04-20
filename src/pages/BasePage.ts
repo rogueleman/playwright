@@ -43,7 +43,7 @@ export abstract class BasePage {
    * Get text content from an element
    */
   async getText(selector: string): Promise<string> {
-    return await this.page.locator(selector).textContent() || '';
+    return (await this.page.locator(selector).textContent()) || '';
   }
 
   /**

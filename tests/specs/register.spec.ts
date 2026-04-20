@@ -1,4 +1,4 @@
-import { test, expect } from '@fixtures/baseTest';
+import { test } from '@fixtures/baseTest';
 import { generateUniqueUsername } from '@utils/testHelpers';
 
 test.describe('Registration Page Tests', () => {
@@ -7,7 +7,9 @@ test.describe('Registration Page Tests', () => {
     await registerPage.navigateToRegister();
   });
 
-  test('should display the registration page with all required elements', async ({ registerPage }) => {
+  test('should display the registration page with all required elements', async ({
+    registerPage,
+  }) => {
     // Verify registration page is displayed
     await registerPage.verifyRegisterPageDisplayed();
 

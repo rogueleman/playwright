@@ -25,7 +25,9 @@ export class BMIPage extends BasePage {
     this.calculateButton = page.locator('button:has-text("Calculate")');
     this.resultDiv = page.locator('#divResult');
     this.bmiSpan = page.locator('#BMI');
-    this.resultBold = page.locator('[style*="font-size: 30px"][style*="font-weight: bold"][style*="color: #000"]');
+    this.resultBold = page.locator(
+      '[style*="font-size: 30px"][style*="font-weight: bold"][style*="color: #000"]'
+    );
   }
 
   /**
@@ -121,7 +123,7 @@ export class BMIPage extends BasePage {
 
     // Set inputs
     console.log('\n=== BMI Calculator Test ===');
-    console.log(`Input Values:`);
+    console.log('Input Values:');
     console.log(`  Gender: ${gender}`);
     console.log(`  Age: ${age}`);
     console.log(`  Height: ${height} cm`);
@@ -152,7 +154,7 @@ export class BMIPage extends BasePage {
     const boldMatch = resultFromBold.match(/\d+\.\d+/);
     const resultBoldNumeric = boldMatch ? parseFloat(boldMatch[0]) : 0;
 
-    console.log(`\nAssertions:`);
+    console.log('\nAssertions:');
     console.log(`  Expected BMI: ${expectedBMI}`);
     console.log(`  #BMI span numeric value: ${resultDivNumeric}`);
     console.log(`  Bold element numeric value: ${resultBoldNumeric}`);
@@ -160,7 +162,7 @@ export class BMIPage extends BasePage {
     // Assert all values match
     expect(resultDivNumeric).toBe(expectedBMI);
     expect(resultBoldNumeric).toBe(expectedBMI);
-    console.log(`\nAll assertions passed! ✓`);
+    console.log('\nAll assertions passed! ✓');
     console.log('========================\n');
   }
 }

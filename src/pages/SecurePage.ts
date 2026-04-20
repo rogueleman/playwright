@@ -43,7 +43,7 @@ export class SecurePage extends BasePage {
    * Get the success message text
    */
   async getSuccessMessageText(): Promise<string> {
-    return await this.successMessage.textContent() || '';
+    return (await this.successMessage.textContent()) || '';
   }
 
   /**

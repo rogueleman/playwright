@@ -44,7 +44,7 @@ export class DynamicTablePage extends BasePage {
     const headers = await this.tableHeaders.allTextContents();
 
     // Log headers for debugging
-    console.log('Table headers:', headers.map(h => h.trim()).join(' | '));
+    console.log('Table headers:', headers.map((h) => h.trim()).join(' | '));
 
     for (let i = 0; i < headers.length; i++) {
       const headerText = headers[i].trim().toUpperCase();
@@ -56,7 +56,7 @@ export class DynamicTablePage extends BasePage {
     }
 
     throw new Error(
-      `CPU column (with "CPU" text) not found in table headers. Available headers: ${headers.map(h => h.trim()).join(', ')}`
+      `CPU column (with "CPU" text) not found in table headers. Available headers: ${headers.map((h) => h.trim()).join(', ')}`
     );
   }
 
@@ -157,7 +157,7 @@ export class DynamicTablePage extends BasePage {
 
     // Print headers
     const headers = await this.tableHeaders.allTextContents();
-    console.log('Headers:', headers.map(h => h.trim()).join(' | '));
+    console.log('Headers:', headers.map((h) => h.trim()).join(' | '));
 
     // Print all rows
     const rows = await this.tableRows.count();
@@ -185,7 +185,7 @@ export class DynamicTablePage extends BasePage {
     console.log('\n=== Chrome CPU Label Information ===');
 
     const labelValue = await this.chromeCpuLabel.textContent();
-    console.log(`Label ID: chrome-cpu`);
+    console.log('Label ID: chrome-cpu');
     console.log(`Label Value: ${labelValue?.trim() || 'N/A'}`);
 
     console.log('======================================\n');

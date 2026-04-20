@@ -34,7 +34,9 @@ export class RegisterPage extends AuthPage {
   async verifyRegisterPageDisplayed(): Promise<void> {
     await this.waitForElement('#username');
     await this.waitForElement('#password');
-    await this.waitForElement('#confirm_password, #confirmPassword, input[placeholder*="Confirm" i]');
+    await this.waitForElement(
+      '#confirm_password, #confirmPassword, input[placeholder*="Confirm" i]'
+    );
     await this.waitForElement('button[type="submit"]');
   }
 
@@ -42,7 +44,10 @@ export class RegisterPage extends AuthPage {
    * Enter confirm password
    */
   async enterConfirmPassword(password: string): Promise<void> {
-    await this.fillInput('#confirm_password, #confirmPassword, input[placeholder*="Confirm" i]', password);
+    await this.fillInput(
+      '#confirm_password, #confirmPassword, input[placeholder*="Confirm" i]',
+      password
+    );
   }
 
   /**

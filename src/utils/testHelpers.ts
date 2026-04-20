@@ -12,7 +12,7 @@ import { Page } from '@playwright/test';
 export function generateUniqueUsername(): string {
   const randomBytes = crypto.getRandomValues(new Uint8Array(6));
   const hexString = Array.from(randomBytes)
-    .map(b => b.toString(16).padStart(2, '0'))
+    .map((b) => b.toString(16).padStart(2, '0'))
     .join('');
   return `gmg-${hexString}`;
 }
@@ -64,10 +64,7 @@ export async function waitForCondition(
 /**
  * Take a screenshot with timestamp
  */
-export async function takeScreenshotWithTimestamp(
-  page: Page,
-  testName: string
-): Promise<string> {
+export async function takeScreenshotWithTimestamp(page: Page, testName: string): Promise<string> {
   const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
   const filename = `screenshots/${testName}-${timestamp}.png`;
   await page.screenshot({ path: filename });
