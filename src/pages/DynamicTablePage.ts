@@ -6,7 +6,7 @@ import { BasePage } from './BasePage';
  * Handles dynamic table where columns and rows can change positions
  */
 export class DynamicTablePage extends BasePage {
-  // Page locators
+  // Page locators using smart locator strategies where applicable
   readonly pageHeading: Locator;
   readonly dynamicTable: Locator;
   readonly tableRows: Locator;
@@ -15,10 +15,10 @@ export class DynamicTablePage extends BasePage {
 
   constructor(page: Page) {
     super(page);
-    this.pageHeading = page.locator('h1, h2');
-    this.dynamicTable = page.locator('table');
-    this.tableRows = page.locator('table tbody tr');
-    this.tableHeaders = page.locator('table thead th');
+    this.pageHeading = page.getByRole('heading');
+    this.dynamicTable = page.getByRole('table');
+    this.tableRows = this.dynamicTable.getByRole('row');
+    this.tableHeaders = this.dynamicTable.getByRole('columnheader');
     this.chromeCpuLabel = page.locator('#chrome-cpu');
   }
 
@@ -33,7 +33,7 @@ export class DynamicTablePage extends BasePage {
    * Verify page is displayed
    */
   async verifyPageDisplayed(): Promise<void> {
-    await this.waitForElement('table');
+    await expect(this.dynamicTable).toBeVisible();
   }
 
   /**
@@ -69,7 +69,7 @@ export class DynamicTablePage extends BasePage {
 
     for (let i = 0; i < rows; i++) {
       const row = this.tableRows.nth(i);
-      const cells = row.locator('td');
+      const cells = row.getByRole('cell');
       const cellCount = await cells.count();
 
       for (let j = 0; j < cellCount; j++) {
@@ -97,7 +97,7 @@ export class DynamicTablePage extends BasePage {
 
     // Get the cell at the intersection of Chrome row and CPU column
     const chromeRow = this.tableRows.nth(chromeRowIndex);
-    const cells = chromeRow.locator('td');
+    const cells = chromeRow.getByRole('cell');
     const cpuCell = cells.nth(cpuColumnIndex);
 
     const cpuValue = await cpuCell.textContent();
@@ -163,7 +163,7 @@ export class DynamicTablePage extends BasePage {
     const rows = await this.tableRows.count();
     for (let i = 0; i < rows; i++) {
       const row = this.tableRows.nth(i);
-      const cells = row.locator('td');
+      const cells = row.getByRole('cell');
       const cellCount = await cells.count();
       const rowData = [];
 

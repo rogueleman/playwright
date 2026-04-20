@@ -6,7 +6,7 @@ import { BasePage } from './BasePage';
  * Handles BMI calculation with inputs for gender, age, height, and weight
  */
 export class BMIPage extends BasePage {
-  // Page locators
+  // Page locators using ID-based selectors (most stable) and smart role-based locators
   readonly genderSelect: Locator;
   readonly ageInput: Locator;
   readonly heightInput: Locator;
@@ -18,11 +18,12 @@ export class BMIPage extends BasePage {
 
   constructor(page: Page) {
     super(page);
-    this.genderSelect = page.locator('#gender');
-    this.ageInput = page.locator('#age');
-    this.heightInput = page.locator('#height');
-    this.weightInput = page.locator('#weight');
-    this.calculateButton = page.locator('button:has-text("Calculate")');
+    // Use specific role-based selectors to avoid matching unrelated page elements
+    this.genderSelect = page.getByRole('combobox', { name: /gender/i });
+    this.ageInput = page.getByRole('spinbutton', { name: /age/i });
+    this.heightInput = page.getByRole('spinbutton', { name: /height/i });
+    this.weightInput = page.getByRole('spinbutton', { name: /weight/i });
+    this.calculateButton = page.getByRole('button', { name: /calculate/i });
     this.resultDiv = page.locator('#divResult');
     this.bmiSpan = page.locator('#BMI');
     this.resultBold = page.locator(

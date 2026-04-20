@@ -7,14 +7,14 @@ import { AuthPage } from './AuthPage';
  * Extends AuthPage to inherit common authentication form elements and methods
  */
 export class LoginPage extends AuthPage {
-  // Login-specific locators
+  // Login-specific locators using smart locator strategies
   readonly pageHeading: Locator;
   readonly loginButton: Locator;
 
   constructor(page: Page) {
     super(page);
-    this.pageHeading = page.locator('h1, h2');
-    this.loginButton = page.locator('button:has-text("Login"), button[type="submit"]');
+    this.pageHeading = page.getByRole('heading');
+    this.loginButton = page.getByRole('button', { name: /login/i });
   }
 
   /**
@@ -28,9 +28,9 @@ export class LoginPage extends AuthPage {
    * Perform login with username and password
    */
   async login(username: string, password: string): Promise<void> {
-    await this.fillInput('#username', username);
-    await this.fillInput('#password', password);
-    await this.click('button[type="submit"]');
+    await this.usernameInput.fill(username);
+    await this.passwordInput.fill(password);
+    await this.loginButton.click();
     // Wait for page load after login
     await this.page.waitForLoadState('load');
   }
@@ -39,15 +39,15 @@ export class LoginPage extends AuthPage {
    * Click login button
    */
   async clickLoginButton(): Promise<void> {
-    await this.click('button[type="submit"]');
+    await this.loginButton.click();
   }
 
   /**
    * Verify login page is displayed
    */
   async verifyLoginPageDisplayed(): Promise<void> {
-    await this.waitForElement('#username');
-    await this.waitForElement('#password');
+    await expect(this.usernameInput).toBeVisible();
+    await expect(this.passwordInput).toBeVisible();
     await this.waitForElement('button[type="submit"]');
   }
 
@@ -55,7 +55,7 @@ export class LoginPage extends AuthPage {
    * Verify a specific error message is displayed
    */
   async verifyErrorMessageText(expectedMessage: string): Promise<void> {
-    const errorMessageLocator = this.page.locator(`text=${expectedMessage}`);
+    const errorMessageLocator = this.page.getByText(expectedMessage);
     await expect(errorMessageLocator).toBeVisible();
   }
 

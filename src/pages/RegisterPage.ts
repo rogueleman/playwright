@@ -7,18 +7,18 @@ import { AuthPage } from './AuthPage';
  * Extends AuthPage to inherit common authentication form elements and methods
  */
 export class RegisterPage extends AuthPage {
-  // Register-specific locators
+  // Register-specific locators using smart locator strategies
   readonly pageHeading: Locator;
   readonly confirmPasswordInput: Locator;
   readonly registerButton: Locator;
 
   constructor(page: Page) {
     super(page);
-    this.pageHeading = page.locator('h1, h2');
-    this.confirmPasswordInput = page.locator(
-      '#confirm_password, #confirmPassword, input[name="confirm_password"], input[placeholder*="Confirm" i]'
-    );
-    this.registerButton = page.locator('button:has-text("Register"), button[type="submit"]');
+    this.pageHeading = page.getByRole('heading');
+    this.confirmPasswordInput = page
+      .getByLabel(/confirm.*password/i)
+      .or(page.getByPlaceholder(/confirm/i));
+    this.registerButton = page.getByRole('button', { name: /register/i });
   }
 
   /**
@@ -32,29 +32,24 @@ export class RegisterPage extends AuthPage {
    * Verify register page is displayed
    */
   async verifyRegisterPageDisplayed(): Promise<void> {
-    await this.waitForElement('#username');
-    await this.waitForElement('#password');
-    await this.waitForElement(
-      '#confirm_password, #confirmPassword, input[placeholder*="Confirm" i]'
-    );
-    await this.waitForElement('button[type="submit"]');
+    await expect(this.usernameInput).toBeVisible();
+    await expect(this.passwordInput).toBeVisible();
+    await expect(this.confirmPasswordInput).toBeVisible();
+    await expect(this.registerButton).toBeVisible();
   }
 
   /**
    * Enter confirm password
    */
   async enterConfirmPassword(password: string): Promise<void> {
-    await this.fillInput(
-      '#confirm_password, #confirmPassword, input[placeholder*="Confirm" i]',
-      password
-    );
+    await this.confirmPasswordInput.fill(password);
   }
 
   /**
    * Click register button
    */
   async clickRegisterButton(): Promise<void> {
-    await this.click('button[type="submit"]');
+    await this.registerButton.click();
   }
 
   /**
@@ -75,28 +70,16 @@ export class RegisterPage extends AuthPage {
     // Wait for success message to be visible
     await this.page.waitForTimeout(1000); // Wait for page to process
 
-    // Try multiple selectors for success message
-    const successSelectors = [
-      'text=successfully registered',
-      'text=registered successfully',
-      'text=successfully',
-      '[class*="success"]',
-      '.alert-success',
-      '.success-message',
-    ];
+    // Use smart locator for success message
+    const successMessage = this.page.getByText(/successfully registered|registered successfully/i);
 
     let found = false;
-    for (const selector of successSelectors) {
-      try {
-        const element = this.page.locator(selector);
-        if (await element.isVisible({ timeout: 2000 })) {
-          found = true;
-          break;
-        }
-      } catch {
-        // Continue to next selector
-        continue;
+    try {
+      if (await successMessage.isVisible({ timeout: 2000 })) {
+        found = true;
       }
+    } catch {
+      // Continue to check other indicators
     }
 
     if (!found) {
@@ -134,9 +117,7 @@ export class RegisterPage extends AuthPage {
    */
   async verifyConfirmPasswordInputFunctionality(testValue: string): Promise<void> {
     await this.enterConfirmPassword(testValue);
-    const confirmPasswordValue = await this.page
-      .locator('#confirm_password, #confirmPassword, input[placeholder*="Confirm" i]')
-      .inputValue();
+    const confirmPasswordValue = await this.confirmPasswordInput.inputValue();
     expect(confirmPasswordValue).toBe(testValue);
   }
 }

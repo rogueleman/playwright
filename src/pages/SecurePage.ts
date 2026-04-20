@@ -6,16 +6,16 @@ import { BasePage } from './BasePage';
  * This page is displayed after successful login
  */
 export class SecurePage extends BasePage {
-  // Page locators
+  // Page locators using smart locator strategies
   readonly successMessage: Locator;
   readonly logoutButton: Locator;
   readonly pageHeading: Locator;
 
   constructor(page: Page) {
     super(page);
-    this.pageHeading = page.locator('h1, h2');
-    this.successMessage = page.locator('text=You logged into a secure area!');
-    this.logoutButton = page.locator('button:has-text("Logout"), a:has-text("Logout")');
+    this.pageHeading = page.getByRole('heading');
+    this.successMessage = page.getByText(/you logged into a secure area/i);
+    this.logoutButton = page.getByRole('link', { name: /logout/i });
   }
 
   /**
