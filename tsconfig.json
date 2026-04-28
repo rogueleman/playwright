@@ -19,7 +19,8 @@
       "@fixtures/*": ["src/fixtures/*"],
       "@utils/*": ["src/utils/*"],
       "@types/*": ["src/types/*"],
-      "@config/*": ["src/config/*"]
+      "@config/*": ["src/config/*"],
+      "@api/*": ["src/api/*"]
     },
     "moduleResolution": "node"
   },

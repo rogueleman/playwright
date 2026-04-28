@@ -1,0 +1,60 @@
+/**
+ * Random User API constants
+ */
+
+export const RANDOMUSER_API = {
+  BASE_URL: 'https://randomuser.me/api/',
+  VERSION: '1.4',
+  GENDERS: {
+    MALE: 'male',
+    FEMALE: 'female',
+  },
+  NATIONALITIES: {
+    US: 'us',
+    GB: 'gb',
+    FR: 'fr',
+    DE: 'de',
+    DK: 'dk',
+    ES: 'es',
+    CA: 'ca',
+    AU: 'au',
+    BR: 'br',
+    CH: 'ch',
+    IN: 'in',
+    IR: 'ir',
+    MX: 'mx',
+    NL: 'nl',
+    NO: 'no',
+    NZ: 'nz',
+    RS: 'rs',
+    TR: 'tr',
+    UA: 'ua',
+  } as const,
+  FORMATS: {
+    JSON: 'json',
+    CSV: 'csv',
+    YAML: 'yaml',
+    XML: 'xml',
+    PRETTY: 'pretty',
+  } as const,
+  PASSWORD_CHARSETS: {
+    SPECIAL: 'special',
+    UPPER: 'upper',
+    LOWER: 'lower',
+    NUMBER: 'number',
+  } as const,
+  FIELDS: {
+    GENDER: 'gender',
+    NAME: 'name',
+    LOCATION: 'location',
+    EMAIL: 'email',
+    LOGIN: 'login',
+    REGISTERED: 'registered',
+    DOB: 'dob',
+    PHONE: 'phone',
+    CELL: 'cell',
+    ID: 'id',
+    PICTURE: 'picture',
+    NAT: 'nat',
+  } as const,
+};
